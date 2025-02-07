@@ -13,7 +13,6 @@ let currentPlayer = null;
 let gameover = false;
 let scores = { X: 0, O: 0 };
 
-
 function loadScores() {
     const savedScores = JSON.parse(localStorage.getItem("tic_tac_toe_scores")) || { X: 0, O: 0 };
     scores = savedScores;
@@ -44,7 +43,7 @@ window.onload = loadScores;
 searchButton.addEventListener('click', () => {
     if (ws && ws.readyState === WebSocket.OPEN) return;
 
-    ws = new WebSocket('ws://localhost:3001');
+    ws = new WebSocket('ws://x-o-x-project.onrender.com');
 
     ws.onopen = () => {
         console.log('WebSocket bağlantısı kuruldu.');
