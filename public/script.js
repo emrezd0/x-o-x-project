@@ -43,7 +43,7 @@ window.onload = loadScores;
 searchButton.addEventListener('click', () => {
     if (ws && ws.readyState === WebSocket.OPEN) return;
 
-    ws = new WebSocket('ws://x-o-x-project.onrender.com');
+    ws = new WebSocket('wss://x-o-x-project.onrender.com');
 
     ws.onopen = () => {
         console.log('WebSocket bağlantısı kuruldu.');
