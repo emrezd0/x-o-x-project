@@ -14,15 +14,17 @@ body {
     background: rgba(255, 255, 255, 0.1);
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba,(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+/* 🟢 Oyun Tahtası */
 #board {
-    display: flex;
+    display: grid;
     grid-template-columns: repeat(3, 100px);
     grid-template-rows: repeat(3, 100px);
     gap: 10px;
     margin-top: 20px;
+    justify-content: center;
 }
 
 .cell {
@@ -35,19 +37,63 @@ body {
     border: 2px solid #fff;
     background: rgba(255, 255, 255, 0.2);
     cursor: pointer;
-    transition: background 0.3s transform 0.3s;
+    transition: background 0.3s, transform 0.3s;
 }
 
-.cell.hover {
+.cell:hover {
     background: rgba(255, 255, 255, 0.4);
     transform: scale(1.05);
 }
 
-#message, #turn-message {
-  margin-top: 20px;
-  font-size: 1.5em;
+/* 🟣 Sohbet Alanı */
+#chat-container {
+    margin-top: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 10px;
+    border-radius: 8px;
+    width: 250px;
+    display: none; /* Başlangıçta gizli */
 }
 
+#chat-messages {
+    height: 150px;
+    overflow-y: auto;
+    border: 1px solid #fff;
+    padding: 5px;
+    text-align: left;
+    font-size: 0.9em;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+#chat-input {
+    width: calc(100% - 60px);
+    padding: 5px;
+    margin-top: 5px;
+    border: none;
+    border-radius: 5px;
+}
+
+#chat-button {
+    padding: 5px 10px;
+    font-size: 0.9em;
+    background: #4a90e2;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#chat-button:hover {
+    background: #3a7bd5;
+}
+
+/* 🔵 Mesaj & Sıra Bilgisi */
+#message, #turn-message {
+    margin-top: 20px;
+    font-size: 1.5em;
+}
+
+/* 🟠 Butonlar */
 button {
     padding: 10px 20px;
     font-size: 1em;
@@ -61,7 +107,6 @@ button {
 
 button:hover {
     background: #3a7bd5;
-
 }
 
 #restart-button {
