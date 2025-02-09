@@ -49,7 +49,16 @@ wss.on('connection', (ws) => {
 
                 checkWinner(game);
             }
-        } else if (data.type === 'restart' && game) {
+        } 
+        else if (data.type === 'chat' && game) {
+            // Sohbet mesajını diğer oyuncuya gönder
+            game.players.forEach(player => {
+                if (player !== ws) { // Mesajı sadece karşı tarafa gönder
+                    player.send(JSON.stringify({ type: 'chat', message: data.message }));
+                }
+            });
+        }
+        else if (data.type === 'restart' && game) {
             game.board = Array(9).fill(null);
             game.currentPlayer = Math.random() < 0.5 ? game.players[0] : game.players[1];
             game.winner = null;
