@@ -3,14 +3,42 @@ const board = document.getElementById('board');
 const message = document.getElementById('message');
 const turnMessage = document.getElementById('turn-message');
 const restartButton = document.getElementById('restart-button');
-const chatInput = document.getElementById('chat-input');
-const chatButton = document.getElementById('chat-button');
-const chatMessages = document.getElementById('chat-messages');
 const cells = document.querySelectorAll('.cell'); 
+const scoreX = document.getElementById('score-x');
+const scoreO = document.getElementById('score-o');
+const scoreboard = document.getElementById('scoreboard');
 
 let ws;
 let currentPlayer = null;
 let gameover = false;
+let scores = { X: 0, O: 0 };
+
+function loadScores() {
+    const savedScores = JSON.parse(localStorage.getItem("tic_tac_toe_scores")) || { X: 0, O: 0 };
+    scores = savedScores;
+    scoreX.textContent = scores.X;
+    scoreO.textContent = scores.O;
+}
+
+function updateScore(winner) {
+    if (winner === 'X') {
+        scores.X++;
+    } else if (winner === 'O') {
+        scores.O++;
+    }
+    localStorage.setItem("tic_tac_toe_scores", JSON.stringify(scores));
+    scoreX.textContent = scores.X;
+    scoreO.textContent = scores.O;
+}
+
+function resetScores() {
+    scores = { X: 0, O: 0 };
+    localStorage.setItem("tic_tac_toe_scores", JSON.stringify(scores));
+    scoreX.textContent = scores.X;
+    scoreO.textContent = scores.O;
+}
+
+window.onload = loadScores;
 
 searchButton.addEventListener('click', () => {
     if (ws && ws.readyState === WebSocket.OPEN) return;
@@ -18,8 +46,7 @@ searchButton.addEventListener('click', () => {
     ws = new WebSocket('wss://x-o-x-project.onrender.com');
 
     ws.onopen = () => {
-        console.log('WebSocket bağlantısı kuruldu.');
-        board.style.display = 'none';
+        board.style.display = 'grid';
         searchButton.style.display = 'none';
     };
 
@@ -29,37 +56,25 @@ searchButton.addEventListener('click', () => {
         if (data.type === 'start') {
             currentPlayer = data.currentPlayer;
             turnMessage.textContent = currentPlayer ? 'Your turn' : 'Opponent\'s turn';
-            board.style.display = 'grid';
-            restartButton.style.display = 'inline-block';
+            message.textContent = '';
+            scoreboard.style.display = 'block';
         } else if (data.type === 'move') {
             updateBoard(data.board);
             currentPlayer = data.currentPlayer;
             turnMessage.textContent = currentPlayer ? 'Your turn' : 'Opponent\'s turn';
-        } else if (data.type === 'chat') {
-            // Sohbet mesajlarını ekrana yazdır
-            const msgElement = document.createElement('p');
-            msgElement.textContent = `Opponent: ${data.message}`;
-            chatMessages.appendChild(msgElement);
+        } else if (data.type === 'win') {
+            message.textContent = `Player ${data.winner} wins!`;
+            gameover = true;
+            updateScore(data.winner);
+        } else if (data.type === 'draw') {
+            message.textContent = 'It\'s a draw!';
+            gameover = true;
         }
     };
-
-    ws.onclose = () => {
-        message.textContent = 'Disconnected. Click "Player Search" to find a new opponent.';
-        searchButton.style.display = 'inline-block';
-    };
 });
 
-// Sohbet gönderme işlevi
-chatButton.addEventListener('click', () => {
-    const msg = chatInput.value.trim();
-    if (msg && ws && ws.readyState === WebSocket.OPEN) {
-        ws.send(JSON.stringify({ type: 'chat', message: msg }));
-        
-        // Mesajı kendi ekranına da ekle
-        const msgElement = document.createElement('p');
-        msgElement.textContent = `You: ${msg}`;
-        chatMessages.appendChild(msgElement);
-
-        chatInput.value = '';
-    }
-});
+function updateBoard(boardState) {
+    cells.forEach((cell, index) => {
+        cell.textContent = boardState[index] || '';
+    });
+}
