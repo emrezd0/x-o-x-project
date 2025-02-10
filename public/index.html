@@ -11,7 +11,6 @@
     <div id="game-container">
         <button id="search-button">Player Search</button>
 
-        <!-- Skor Tablosu -->
         <div id="scoreboard" style="display: none;">
             <h2>Scoreboard</h2>
             <p>Player X: <span id="score-x">0</span></p>
@@ -19,7 +18,6 @@
             <button onclick="resetScores()">Reset Scores</button>
         </div>
 
-        <!-- Oyun Tahtası -->
         <div id="board" style="display: none;">
             <div class="cell" data-index="0"></div>
             <div class="cell" data-index="1"></div>
@@ -36,15 +34,6 @@
         <div id="turn-message"></div>
         
         <button id="restart-button" style="display: none;">Play Again</button>
-
-        <!-- 🟢 Sohbet Alanı -->
-        <div id="chat-container" style="display: none;">
-            <h3>Chat</h3>
-            <div id="chat-messages"></div>
-            <input type="text" id="chat-input" placeholder="Type a message...">
-            <button id="chat-button">Send</button>
-        </div>
-
     </div>
 
     <script src="script.js"></script>
